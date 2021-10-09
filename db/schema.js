@@ -1,9 +1,5 @@
 const { gql } = require("apollo-server");
 
-// Schema
-// Requiere en el schema un type query con una funcion
-// y un resolver que satisfaga esa funcion
-// Define lo que esta aqui es codigo de gql
 const typeDefs = gql`
   type Usuario {
     id: ID
@@ -38,16 +34,8 @@ const typeDefs = gql`
   type PedidoGrupo {
     id: ID
     cantidad: Int
-  }
-
-  type Pedido {
-    id: ID
-    pedido: [PedidoGrupo]
-    total: Float
-    cliente: ID
-    vendedor: ID
-    fecha: String
-    estado: EstadoPedido
+    nombre: String
+    precio: Float
   }
 
   type TopCliente {
@@ -58,6 +46,16 @@ const typeDefs = gql`
   type TopVendedor {
     total: Float
     vendedor: [Usuario]
+  }
+
+  type Pedido {
+    id: ID
+    pedido: [PedidoGrupo]
+    total: Float
+    cliente: Cliente
+    vendedor: ID
+    fecha: String
+    estado: EstadoPedido
   }
 
   input UsuarioInput {
@@ -89,6 +87,8 @@ const typeDefs = gql`
   input PedidoProductoInput {
     id: ID
     cantidad: Int
+    nombre: String
+    precio: Float
   }
 
   input PedidoInput {
@@ -106,7 +106,7 @@ const typeDefs = gql`
 
   type Query {
     # Usuarios
-    obtenerUsuario(token: String!): Usuario
+    obtenerUsuario: Usuario
 
     # Productos
     obtenerProductos: [Producto]
@@ -144,7 +144,7 @@ const typeDefs = gql`
     actualizarCliente(id: ID!, input: ClienteInput): Cliente
     eliminarCliente(id: ID!): String
 
-    # Pedido
+    # Pedidos
     nuevoPedido(input: PedidoInput): Pedido
     actualizarPedido(id: ID!, input: PedidoInput): Pedido
     eliminarPedido(id: ID!): String
